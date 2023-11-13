@@ -17,26 +17,38 @@ class MyTopo( Topo ):
         link_config = dict()
         host_link_config = dict()
  
-        h1 = self.addHost('h1')
-        h2 = self.addHost('h2')
-        h3 = self.addHost('h3')
-        h4 = self.addHost('h4')
-        h5 = self.addHost('h5')
-        h6 = self.addHost('h6')
-        h7 = self.addHost('h7')
 
-        s1 = self.addSwitch('s1')
-        s2 = self.addSwitch('s2')
-        s3 = self.addSwitch('s3')
+        # Add hosts and switches
+      
+        for i in range(3):
+            sconfig = {"dpid": "%016x" % (i + 1)}
+            self.addSwitch("s%d" % (i + 1), **sconfig)
+            
+
+        for i in range(7):
+            self.addHost("h%d" % (i + 1), **host_config)
 
 
-        self.addLink(h1, s1)
-        self.addLink(h2, s1)
-        self.addLink(h3, s1)
-        self.addLink(h4, s2)
-        self.addLink(h5, s2)
-        self.addLink(h6, s3)
-        self.addLink(h7, s3)
+
+        # Add links
+        # Add router link
+        self.addLink("s1", "s2",**link_config)
+        self.addLink("s1", "s3",**link_config)
+        self.addLink("s2", "s3",**link_config)
+
+        # Add clients-switch links
+
+        self.addLink("h1", "s1", **host_link_config)
+        self.addLink("h2", "s1", **host_link_config)
+        self.addLink("h3", "s1", **host_link_config)
+        self.addLink("h4", "s2", **host_link_config)
+        self.addLink("h5", "s2", **host_link_config)
+        self.addLink("h6", "s3", **host_link_config)
+        self.addLink("h7", "s3", **host_link_config)
+        
+
+
+
 
 topos = { 'mytopo': ( lambda: MyTopo() ) }
 
@@ -45,7 +57,7 @@ if __name__ == "__main__":
     net = Mininet(
         topo=topo,
         
-        #specify an external controller by passing the Controller object in the Mininet constructor
+        # We specify an external controller by passing the Controller object in the Mininet constructor
         #controller=RemoteController( 'c0', ip='127.0.0.1'), 
         switch=OVSKernelSwitch,
         build=False,
@@ -54,14 +66,13 @@ if __name__ == "__main__":
         link=TCLink,
     )
 
-    controller = RemoteController('c0', ip='127.0.0.1', port=6633)
+    controller = RemoteController('c0', ip='127.0.0.1', port=6653)
     net.addController(controller)
     
     net.build()
     net.start()
 
     subprocess.call("./init_link.sh")
-    net.pingAll()
+    
     CLI(net)
-
     net.stop()
