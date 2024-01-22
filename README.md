@@ -1,6 +1,7 @@
 # Networking2-slicing-project
 
- 
+[presentation](https://www.canva.com/design/DAF6V0TGHew/y-J-cTY77p6Nq6W3_mctZA/edit?utm_content=DAF6V0TGHew&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 ## Introduction ## 
 The goal of this project is to implement a network slicing approach to enable dynamic activation/de-activation of network slices via GUI and CLI commands within Comnetsemu enviroment. The original Comnetsemu source code with all the detailed examples can be found here. 
  
